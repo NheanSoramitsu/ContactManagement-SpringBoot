@@ -6,13 +6,16 @@ import com.soramitsukhmer.contactmanagement.api.request.FilterParamsStaffDTO
 import com.soramitsukhmer.contactmanagement.api.request.RequestCompanyDTO
 import com.soramitsukhmer.contactmanagement.domain.model.Company
 import com.soramitsukhmer.contactmanagement.repository.CompanyRepository
+import com.soramitsukhmer.contactmanagement.service.validation.CompanyValidationService
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.lang.RuntimeException
+import kotlin.RuntimeException
 
 @Service
 class CompanyService(
-        val companyRepository: CompanyRepository
+        val companyRepository: CompanyRepository,
+        val companyValidationService: CompanyValidationService
 ){
     fun listAllCompanies() : List<CompanyDTO>{
         return companyRepository.findAll().map { it.toDTO() }
@@ -26,6 +29,7 @@ class CompanyService(
 
     fun createCompany(reqCompanyDTO: RequestCompanyDTO) : CompanyDTO{
         val newCompany = Company.fromReqDTO(reqCompanyDTO)
+        companyValidationService.validateUniquePhone(null, newCompany.phone)
         return companyRepository.save(newCompany).toDTO()
     }
 
@@ -33,6 +37,7 @@ class CompanyService(
         val company = companyRepository.findById(id).orElseThrow{
             throw RuntimeException("CompanyId[$id] is not found.")
         }.updateCompany(reqCompanyDTO)
+        companyValidationService.validateUniquePhone(company.id, company.phone)
         return companyRepository.save(company).toDTO()
     }
 

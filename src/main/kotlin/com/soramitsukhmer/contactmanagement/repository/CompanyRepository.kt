@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 
 interface CompanyRepository : CrudRepository<Company, Long>, PagingAndSortingRepository<Company, Long>{
+    fun existsCompanyByPhone(phone: String) : Boolean
+    fun existsCompanyByPhoneAndIdIsNot(phone: String, id: Long): Boolean
 }
