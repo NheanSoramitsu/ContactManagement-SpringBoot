@@ -9,8 +9,6 @@ import com.soramitsukhmer.contactmanagement.repository.CompanyRepository
 import com.soramitsukhmer.contactmanagement.service.validation.CompanyValidationService
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
-import kotlin.RuntimeException
 
 @Service
 class CompanyService(
